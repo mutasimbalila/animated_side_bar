@@ -43,27 +43,27 @@ class MyHomePage extends StatelessWidget {
             //     ElevatedButton(onPressed: () {}, child: const Text("data")),
             sidebarItems: [
               SideBarItem(
-                iconSelected: Icons.home_rounded,
-                iconUnselected: Icons.home_outlined,
+                iconSelectedSvg: 'assets/selected.svg',
+                iconUnselectedSvg: 'assets/unselected.svg',
                 text: 'Home',
               ),
               SideBarItem(
-                iconSelected: Icons.account_balance_wallet,
-                iconUnselected: Icons.account_balance_wallet_outlined,
+                iconSelectedSvg: 'assets/selected.svg',
+                iconUnselectedSvg: 'assets/unselected.svg',
                 text: 'Insights',
               ),
               SideBarItem(
-                iconSelected: CupertinoIcons.chart_bar_square_fill,
-                iconUnselected: CupertinoIcons.chart_bar_square,
+                iconSelectedSvg: 'assets/selected.svg',
+                iconUnselectedSvg: 'assets/unselected.svg',
                 text: 'Feature',
               ),
               SideBarItem(
-                iconSelected: Icons.credit_card_rounded,
+                iconSelectedSvg: 'assets/selected.svg',
                 text: 'Payouts',
               ),
               SideBarItem(
-                iconSelected: Icons.settings,
-                iconUnselected: Icons.settings_outlined,
+                iconSelectedSvg: 'assets/selected.svg',
+                iconUnselectedSvg: 'assets/unselected.svg',
                 text: 'Settings',
               ),
             ],

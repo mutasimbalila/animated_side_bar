@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 ///ignore: must_be_immutable
 class SideBarAnimated extends StatefulWidget {
@@ -10,7 +11,7 @@ class SideBarAnimated extends StatefulWidget {
   Color animatedContainerColor;
   Color selectedColor;
   Color minimizeButtonColor;
-
+  double? iconSize;
   Color unselectedIconColor;
   Color dividerColor;
   Color hoverColor;
@@ -33,6 +34,7 @@ class SideBarAnimated extends StatefulWidget {
 
   SideBarAnimated({
     super.key,
+    this.iconSize,
     this.topWidgetExpanded,
     this.topWidgetMinimize,
     this.bottomWidgetExpanded,
@@ -186,6 +188,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
                           itemBuilder: (context, index) {
                             return sideBarItem(
                                 textStyle: widget.textStyle,
+                                iconSize: widget.iconSize,
                                 unselectedIconColor: widget.unselectedIconColor,
                                 unSelectedTextColor: widget.unSelectedTextColor,
                                 widthSwitch: widget.widthSwitch,
@@ -195,9 +198,9 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
                                 splashColor: widget.splashColor,
                                 highlightColor: widget.highlightColor,
                                 width: _width,
-                                icon:
-                                    widget.sidebarItems[index].iconUnselected ??
-                                        widget.sidebarItems[index].iconSelected,
+                                icon: widget.sidebarItems[index]
+                                        .iconUnselectedSvg ??
+                                    widget.sidebarItems[index].iconSelectedSvg,
                                 text: widget.sidebarItems[index].text,
                                 onTap: () => moveToNewIndex(index));
                           },
@@ -232,11 +235,20 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
                               clipBehavior: Clip.antiAliasWithSaveLayer,
                               scrollDirection: Axis.horizontal,
                               children: [
-                                Icon(
+                                // Icon(
+                                //   widget.sidebarItems[_itemIndex.floor()]
+                                //       .iconSelected,
+                                //   color: widget.selectedColor,
+                                // ),
+
+                                SvgPicture.asset(
                                   widget.sidebarItems[_itemIndex.floor()]
-                                      .iconSelected,
-                                  color: widget.selectedColor,
+                                      .iconSelectedSvg,
+                                  width: widget.iconSize ?? 24,
+                                  colorFilter: ColorFilter.mode(
+                                      widget.selectedColor, BlendMode.srcIn),
                                 ),
+
                                 if (_width >= widget.widthSwitch && !_minimize)
                                   Padding(
                                     padding: const EdgeInsets.only(left: 12.0),
@@ -310,7 +322,8 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
 /// Sidebar model Widget the we used it inside the ListView with inkwell to make each item clickable
 
 Widget sideBarItem({
-  required IconData icon,
+  required String icon,
+  required double? iconSize,
   required String text,
   required double width,
   required double widthSwitch,
@@ -341,9 +354,15 @@ Widget sideBarItem({
           clipBehavior: Clip.antiAliasWithSaveLayer,
           scrollDirection: Axis.horizontal,
           children: [
-            Icon(
+            // Icon(
+            //   icon,
+            //   color: unselectedIconColor,
+            // ),
+            SvgPicture.asset(
               icon,
-              color: unselectedIconColor,
+              width: iconSize ?? 24,
+              colorFilter:
+                  ColorFilter.mode(unselectedIconColor, BlendMode.srcIn),
             ),
             if (width >= widthSwitch && !minimize)
               Padding(
@@ -366,13 +385,13 @@ Widget sideBarItem({
 
 /// Sidebar model
 class SideBarItem {
-  final IconData iconSelected;
-  final IconData? iconUnselected;
+  final String iconSelectedSvg;
+  final String? iconUnselectedSvg;
   final String text;
 
   SideBarItem({
-    required this.iconSelected,
-    this.iconUnselected,
+    required this.iconSelectedSvg,
+    this.iconUnselectedSvg,
     required this.text,
   });
 }
