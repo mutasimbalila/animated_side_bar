@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 ///ignore: must_be_immutable
@@ -21,6 +22,8 @@ class SideBarAnimated extends StatefulWidget {
   double widthSwitch;
   double borderRadius;
   double sideBarWidth;
+  IconData? minimizeIcon;
+  IconData? expandIcon;
   // double sideBarItemHeight;
   double sideBarSmallWidth;
   Widget? topWidgetExpanded;
@@ -34,6 +37,8 @@ class SideBarAnimated extends StatefulWidget {
 
   SideBarAnimated({
     super.key,
+    this.expandIcon,
+    this.minimizeIcon,
     this.iconSize,
     this.topWidgetExpanded,
     this.topWidgetMinimize,
@@ -312,8 +317,8 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
           },
           icon: Icon(
               _width >= widget.widthSwitch && _minimize
-                  ? CupertinoIcons.arrow_right
-                  : Icons.space_dashboard_outlined,
+                  ? (widget.expandIcon ?? CupertinoIcons.arrow_right)
+                  : (widget.minimizeIcon ?? Icons.space_dashboard_outlined),
               color: widget.minimizeButtonColor)),
     );
   }
