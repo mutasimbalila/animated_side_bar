@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +8,9 @@ class SideBarAnimated extends StatefulWidget {
   Duration sideBarAnimationDuration;
   Duration floatingAnimationDuration;
   Color animatedContainerColor;
-  Color selectedIconColor;
+  Color selectedColor;
+  Color minimizeButtonColor;
+
   Color unselectedIconColor;
   Color dividerColor;
   Color hoverColor;
@@ -21,7 +22,10 @@ class SideBarAnimated extends StatefulWidget {
   double sideBarWidth;
   // double sideBarItemHeight;
   double sideBarSmallWidth;
-  String mainLogoImage;
+  Widget? topWidgetExpanded;
+  Widget? topWidgetMinimize;
+  Widget? bottomWidgetMinimize;
+  Widget? bottomWidgetExpanded;
   List<SideBarItem> sidebarItems;
   bool settingsDivider;
   Curve curve;
@@ -29,10 +33,15 @@ class SideBarAnimated extends StatefulWidget {
 
   SideBarAnimated({
     super.key,
+    this.topWidgetExpanded,
+    this.topWidgetMinimize,
+    this.bottomWidgetExpanded,
+    this.bottomWidgetMinimize,
     this.sideBarColor = const Color(0xff1D1D1D),
     this.animatedContainerColor = const Color(0xff323232),
     this.unSelectedTextColor = const Color(0xffA0A5A9),
-    this.selectedIconColor = Colors.white,
+    this.selectedColor = Colors.white,
+    this.minimizeButtonColor = Colors.white,
     this.unselectedIconColor = const Color(0xffA0A5A9),
     this.hoverColor = Colors.black38,
     this.splashColor = Colors.black87,
@@ -47,7 +56,6 @@ class SideBarAnimated extends StatefulWidget {
     this.dividerColor = const Color(0xff929292),
     this.textStyle =
         const TextStyle(fontFamily: "SFPro", fontSize: 16, color: Colors.white),
-    required this.mainLogoImage,
     required this.sidebarItems,
     required this.widthSwitch,
     required this.onTap,
@@ -127,7 +135,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
     return AnimatedContainer(
       curve: widget.curve,
       height: _height,
-      margin: const EdgeInsets.all(20),
+      margin: const EdgeInsets.all(0),
       width: _width >= widget.widthSwitch && !_minimize
           ? widget.sideBarWidth
           : widget.sideBarSmallWidth,
@@ -139,16 +147,25 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.only(
-                left: _width >= widget.widthSwitch && !_minimize ? 20 : 18,
-                top: 24),
-            child: Image.asset(
-              widget.mainLogoImage,
-              width: 48,
-              height: 48,
-            ),
-          ),
+          _width >= widget.widthSwitch && _minimize
+              ? Column(
+                  children: [
+                    if (_width >= widget.widthSwitch) _minimizeButton(),
+                    _buildMainLogoImage(),
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: _buildMainLogoImage(),
+                      ),
+                    ),
+                    if (_width >= widget.widthSwitch) _minimizeButton(),
+                  ],
+                ),
           Expanded(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -218,7 +235,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
                                 Icon(
                                   widget.sidebarItems[_itemIndex.floor()]
                                       .iconSelected,
-                                  color: Colors.white,
+                                  color: widget.selectedColor,
                                 ),
                                 if (_width >= widget.widthSwitch && !_minimize)
                                   Padding(
@@ -227,7 +244,9 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
                                       widget.sidebarItems[_itemIndex.floor()]
                                           .text,
                                       overflow: TextOverflow.ellipsis,
-                                      style: widget.textStyle,
+                                      style: widget.textStyle.copyWith(
+                                        color: widget.selectedColor,
+                                      ),
                                     ),
                                   ),
                               ],
@@ -241,24 +260,49 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
               ),
             ),
           ),
-          if (_width >= widget.widthSwitch)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              child: IconButton(
-                  hoverColor: Colors.black38,
-                  splashColor: Colors.black87,
-                  highlightColor: Colors.black,
-                  onPressed: () {
-                    setState(() => _minimize = !_minimize);
-                  },
-                  icon: Icon(
-                      _width >= widget.widthSwitch && _minimize
-                          ? CupertinoIcons.arrow_right
-                          : Icons.space_dashboard_outlined,
-                      color: widget.selectedIconColor)),
-            )
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            child: (_minimize
+                    ? widget.bottomWidgetMinimize
+                    : widget.bottomWidgetExpanded) ??
+                const SizedBox(),
+          )
         ],
       ),
+    );
+  }
+
+  Padding _buildMainLogoImage() {
+    return Padding(
+      padding: EdgeInsetsDirectional.only(
+          start: _width >= widget.widthSwitch && !_minimize ? 20 : 18, top: 24),
+      child: SizedBox(
+        height: 50,
+        child:
+            (_minimize ? widget.topWidgetMinimize : widget.topWidgetExpanded) ??
+                const SizedBox.shrink(),
+      ),
+    );
+  }
+
+  Padding _minimizeButton() {
+    return Padding(
+      padding: EdgeInsetsDirectional.only(
+          start: _width >= widget.widthSwitch && !_minimize ? 20 : 18,
+          top: 24,
+          end: _width >= widget.widthSwitch && !_minimize ? 20 : 0),
+      child: IconButton(
+          hoverColor: Colors.black38,
+          splashColor: Colors.black87,
+          highlightColor: Colors.black,
+          onPressed: () {
+            setState(() => _minimize = !_minimize);
+          },
+          icon: Icon(
+              _width >= widget.widthSwitch && _minimize
+                  ? CupertinoIcons.arrow_right
+                  : Icons.space_dashboard_outlined,
+              color: widget.minimizeButtonColor)),
     );
   }
 }

@@ -33,10 +33,14 @@ class MyHomePage extends StatelessWidget {
         children: [
           SideBarAnimated(
             onTap: (s) {},
+            borderRadius: 0,
             // sideBarColor: Colors.white,
             // animatedContainerColor: Colors.white,
             widthSwitch: 700,
-            mainLogoImage: 'assets/logo.png',
+            topWidgetExpanded: Image.asset('assets/logo.png'),
+            selectedColor: Colors.red,
+            // topWidgetMinimize:
+            //     ElevatedButton(onPressed: () {}, child: const Text("data")),
             sidebarItems: [
               SideBarItem(
                 iconSelected: Icons.home_rounded,
