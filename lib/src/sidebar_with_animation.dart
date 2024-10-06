@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 ///ignore: must_be_immutable
@@ -36,6 +35,7 @@ class SideBarAnimated extends StatefulWidget {
   TextStyle textStyle;
   bool showHeader;
   int selectedItemIndex;
+  double? topPadding;
   SideBarAnimated({
     super.key,
     this.expandIcon,
@@ -68,6 +68,7 @@ class SideBarAnimated extends StatefulWidget {
     required this.sidebarItems,
     required this.widthSwitch,
     required this.selectedItemIndex,
+    this.topPadding,
     required this.onTap,
   });
 
@@ -162,7 +163,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.only(
-                  top: 40,
+                  top: widget.topPadding ?? 40,
                   left: _width >= widget.widthSwitch && !_minimize ? 20 : 18,
                   right: _width >= widget.widthSwitch && !_minimize ? 20 : 18,
                   bottom: 24),
