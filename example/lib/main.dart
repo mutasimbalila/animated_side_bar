@@ -66,7 +66,7 @@ class MyHomePage extends StatelessWidget {
                 iconUnselectedSvg: 'assets/unselected.svg',
                 text: 'Settings',
               ),
-            ],
+            ], selectedItemIndex: 0,
           ),
           Expanded(
             child: Container(

@@ -34,11 +34,13 @@ class SideBarAnimated extends StatefulWidget {
   bool settingsDivider;
   Curve curve;
   TextStyle textStyle;
-
+  bool showHeader;
+  int selectedItemIndex;
   SideBarAnimated({
     super.key,
     this.expandIcon,
     this.minimizeIcon,
+    this.showHeader = true,
     this.iconSize,
     this.topWidgetExpanded,
     this.topWidgetMinimize,
@@ -65,6 +67,7 @@ class SideBarAnimated extends StatefulWidget {
         const TextStyle(fontFamily: "SFPro", fontSize: 16, color: Colors.white),
     required this.sidebarItems,
     required this.widthSwitch,
+    required this.selectedItemIndex,
     required this.onTap,
   });
 
@@ -77,7 +80,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
   late double _width;
   late double _height;
   late double sideBarItemHeight = 48;
-  double _itemIndex = 0.0;
+  late double _itemIndex = widget.selectedItemIndex.toDouble();
   bool _minimize = false;
   late AnimationController _animationController;
   late Animation<double> _floating;
@@ -154,25 +157,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _width >= widget.widthSwitch && _minimize
-              ? Column(
-                  children: [
-                    if (_width >= widget.widthSwitch) _minimizeButton(),
-                    _buildMainLogoImage(),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: _buildMainLogoImage(),
-                      ),
-                    ),
-                    if (_width >= widget.widthSwitch) _minimizeButton(),
-                  ],
-                ),
+          if (widget.showHeader) _buildLogoHeader(),
           Expanded(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -289,6 +274,28 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
     );
   }
 
+  Flex _buildLogoHeader() {
+    return _width >= widget.widthSwitch && _minimize
+        ? Column(
+            children: [
+              if (_width >= widget.widthSwitch) _minimizeButton(),
+              _buildMainLogoImage(),
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: _buildMainLogoImage(),
+                ),
+              ),
+              if (_width >= widget.widthSwitch) _minimizeButton(),
+            ],
+          );
+  }
+
   Padding _buildMainLogoImage() {
     return Padding(
       padding: EdgeInsetsDirectional.only(
@@ -371,12 +378,12 @@ Widget sideBarItem({
             ),
             if (width >= widthSwitch && !minimize)
               Padding(
-                padding: const EdgeInsets.only(left: 12.0),
+                padding: const EdgeInsetsDirectional.only(start: 12.0),
                 child: Text(
                   text,
                   overflow: TextOverflow.clip,
                   style: textStyle.copyWith(color: unSelectedTextColor),
-                  textAlign: TextAlign.left,
+                  textAlign: TextAlign.start,
                 ),
               ),
           ],
