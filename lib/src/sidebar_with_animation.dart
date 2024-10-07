@@ -96,7 +96,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
 
     _itemIndex ??= widget.initialIndex.toDouble();
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 200))
+        vsync: this, duration: const Duration(milliseconds: 150))
       ..addListener(() {
         setState(() {});
       });
