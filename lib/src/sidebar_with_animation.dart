@@ -98,7 +98,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 150))
       ..addListener(() {
-        setState(() {});
+        // setState(() {});
       });
 
     _floating = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
