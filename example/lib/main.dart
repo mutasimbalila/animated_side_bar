@@ -23,9 +23,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +71,8 @@ class MyHomePage extends StatelessWidget {
                 iconUnselectedSvg: 'assets/unselected.svg',
                 text: 'Settings',
               ),
-            ], selectedItemIndex: 0,
+            ],
+            selectedItemIndex: 0,
           ),
           Expanded(
             child: Container(
