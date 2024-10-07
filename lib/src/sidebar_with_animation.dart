@@ -82,7 +82,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
   late double _width;
   late double _height;
   late double sideBarItemHeight = 48;
-  late double? _itemIndex;
+  double? _itemIndex;
   bool _minimize = false;
   late AnimationController _animationController;
   late Animation<double> _floating;
