@@ -35,7 +35,7 @@ class SideBarAnimated extends StatefulWidget {
   TextStyle textStyle;
   bool showHeader;
   //must be siprate from
-  int? initialValueToSavePrevious;
+  int initialIndex;
   double? topPadding;
   SideBarAnimated({
     super.key,
@@ -68,7 +68,7 @@ class SideBarAnimated extends StatefulWidget {
         const TextStyle(fontFamily: "SFPro", fontSize: 16, color: Colors.white),
     required this.sidebarItems,
     required this.widthSwitch,
-    this.initialValueToSavePrevious,
+    required this.initialIndex,
     this.topPadding,
     required this.onTap,
   });
@@ -82,7 +82,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
   late double _width;
   late double _height;
   late double sideBarItemHeight = 48;
-  late double _itemIndex;
+  late double? _itemIndex;
   bool _minimize = false;
   late AnimationController _animationController;
   late Animation<double> _floating;
@@ -94,10 +94,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
       throw "Side bar Items Can't be empty";
     }
 
-    if (widget.initialValueToSavePrevious != null) {
-      _itemIndex = widget.initialValueToSavePrevious!.toDouble();
-      widget.initialValueToSavePrevious = null;
-    }
+    _itemIndex ??= widget.initialIndex.toDouble();
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 200))
       ..addListener(() {
@@ -218,7 +215,8 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
                           itemCount: widget.sidebarItems.length,
                         ),
                         AnimatedAlign(
-                          alignment: Alignment(0, -1 - (-0.152 * _itemIndex)),
+                          alignment:
+                              Alignment(0, -1 - (-0.152 * (_itemIndex ?? 0))),
                           duration: widget.floatingAnimationDuration,
                           curve: widget.curve,
                           child: Container(
@@ -239,7 +237,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
                                 // ),
 
                                 SvgPicture.asset(
-                                  widget.sidebarItems[_itemIndex.floor()]
+                                  widget.sidebarItems[(_itemIndex ?? 0).floor()]
                                       .iconSelectedSvg,
                                   width: widget.iconSize ?? 24,
                                   colorFilter: ColorFilter.mode(
@@ -250,7 +248,9 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
                                   Padding(
                                     padding: const EdgeInsets.only(left: 12.0),
                                     child: Text(
-                                      widget.sidebarItems[_itemIndex.floor()]
+                                      widget
+                                          .sidebarItems[
+                                              (_itemIndex ?? 0).floor()]
                                           .text,
                                       overflow: TextOverflow.ellipsis,
                                       style: widget.textStyle.copyWith(
