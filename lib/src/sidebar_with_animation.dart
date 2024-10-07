@@ -130,7 +130,12 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
       // timer.cancel();
       // _counterTimer.cancel();
     });
-    widget.onTap?.call(index);
+    Future.delayed(
+      const Duration(milliseconds: 250),
+      () {
+        widget.onTap?.call(index);
+      },
+    );
     // } else if (_itemIndex.floor() < index) {
     //   setState(() => _itemIndex += 1);
     // } else {
