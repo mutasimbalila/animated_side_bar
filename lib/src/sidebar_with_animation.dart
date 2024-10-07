@@ -128,7 +128,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
       // _counterTimer.cancel();
     });
     Future.delayed(
-      const Duration(milliseconds: 200),
+      const Duration(milliseconds: 300),
       () {
         widget.onTap?.call(index);
       },
