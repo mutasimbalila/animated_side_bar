@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 text: 'Settings',
               ),
             ],
-            selectedItemIndex: 0,
+            initialValueToSavePrevuiseState: 0,
           ),
           Expanded(
             child: Container(

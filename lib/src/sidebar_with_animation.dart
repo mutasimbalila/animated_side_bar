@@ -34,7 +34,8 @@ class SideBarAnimated extends StatefulWidget {
   Curve curve;
   TextStyle textStyle;
   bool showHeader;
-  int selectedItemIndex;
+  //must be siprate from
+  int? initialValueToSavePrevious;
   double? topPadding;
   SideBarAnimated({
     super.key,
@@ -67,7 +68,7 @@ class SideBarAnimated extends StatefulWidget {
         const TextStyle(fontFamily: "SFPro", fontSize: 16, color: Colors.white),
     required this.sidebarItems,
     required this.widthSwitch,
-    required this.selectedItemIndex,
+    this.initialValueToSavePrevious,
     this.topPadding,
     required this.onTap,
   });
@@ -81,7 +82,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
   late double _width;
   late double _height;
   late double sideBarItemHeight = 48;
-  late double _itemIndex = widget.selectedItemIndex.toDouble();
+  late double _itemIndex;
   bool _minimize = false;
   late AnimationController _animationController;
   late Animation<double> _floating;
@@ -91,6 +92,11 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
   void initState() {
     if (widget.sidebarItems.isEmpty) {
       throw "Side bar Items Can't be empty";
+    }
+
+    if (widget.initialValueToSavePrevious != null) {
+      _itemIndex = widget.initialValueToSavePrevious!.toDouble();
+      widget.initialValueToSavePrevious = null;
     }
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 200))
@@ -127,12 +133,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
       // timer.cancel();
       // _counterTimer.cancel();
     });
-    Future.delayed(
-      const Duration(milliseconds: 300),
-      () {
-        widget.onTap?.call(index);
-      },
-    );
+    widget.onTap?.call(index);
     // } else if (_itemIndex.floor() < index) {
     //   setState(() => _itemIndex += 1);
     // } else {
