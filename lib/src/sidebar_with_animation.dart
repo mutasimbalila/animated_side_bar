@@ -98,7 +98,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 150))
       ..addListener(() {
-        // setState(() {});
+        setState(() {});
       });
 
     _floating = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
@@ -130,12 +130,8 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
       // timer.cancel();
       // _counterTimer.cancel();
     });
-    Future.delayed(
-      const Duration(milliseconds: 250),
-      () {
-        widget.onTap?.call(index);
-      },
-    );
+    widget.onTap?.call(index);
+
     // } else if (_itemIndex.floor() < index) {
     //   setState(() => _itemIndex += 1);
     // } else {
