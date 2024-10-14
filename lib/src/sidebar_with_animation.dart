@@ -35,7 +35,7 @@ class SideBarAnimated extends StatefulWidget {
   TextStyle textStyle;
   bool showHeader;
   //must be siprate from
-  int initialIndex;
+  // int initialIndex;
   double? topPadding;
   SideBarAnimated({
     super.key,
@@ -68,7 +68,7 @@ class SideBarAnimated extends StatefulWidget {
         const TextStyle(fontFamily: "SFPro", fontSize: 16, color: Colors.white),
     required this.sidebarItems,
     required this.widthSwitch,
-    required this.initialIndex,
+    // required this.initialIndex,
     this.topPadding,
     required this.onTap,
   });
@@ -94,7 +94,7 @@ class _SideBarAnimatedState extends State<SideBarAnimated>
       throw "Side bar Items Can't be empty";
     }
 
-    _itemIndex ??= widget.initialIndex.toDouble();
+    // _itemIndex ??= widget.initialIndex.toDouble();
     _animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 150))
       ..addListener(() {
